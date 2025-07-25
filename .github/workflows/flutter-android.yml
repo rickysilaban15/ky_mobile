@@ -1,20 +1,26 @@
 name: Build Flutter APK
 
 on:
-  workflow_dispatch:  # agar bisa klik "Run workflow" manual di GitHub
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.pub-cache
+            ~/.flutter
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.1'  # ✅ Versi Flutter dengan Dart >= 3.5.0
+          flutter-version: '3.22.0'  # ✅ FIX: Versi terbaru, bawa Dart >=3.5.0
 
       - name: Install dependencies
         run: flutter pub get
