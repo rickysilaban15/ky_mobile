@@ -1,7 +1,7 @@
 name: Build Flutter APK
 
 on:
-  workflow_dispatch:  # agar bisa klik "Run workflow" manual di GitHub
+  workflow_dispatch:  # agar bisa di-run manual dari GitHub
 
 jobs:
   build:
@@ -13,7 +13,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.0'  # Ganti jika kamu pakai versi Flutter lain
+          flutter-version: '3.16.0'  # ganti dengan versi Flutter yang kamu pakai
 
       - name: Install dependencies
         run: flutter pub get
@@ -22,7 +22,11 @@ jobs:
         run: flutter build apk --release
 
       - name: Upload APK as artifact
-        uses: actions/upload-artifact@v4  # ✅ GANTI KE V4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: ky-mobile-release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error      # Gagal kalau file tidak ditemukan
+          retention-days: 14            # Bisa diubah ke max 90 hari
+          compression-level: 6          # Default
+          overwrite: true               # Gantikan jika nama sudah ada
